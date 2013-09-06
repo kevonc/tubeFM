@@ -17,4 +17,3 @@
 .env
 *.DS_Store
 /public/test.txt
-/app/assets/images
