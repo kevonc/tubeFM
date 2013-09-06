@@ -1,0 +1,198 @@
+var channelNameList = [],
+    channelList = [],
+    playlistList = [],
+    trackList = [],
+    numOfTracksInTrackList = 0,
+    nextPageToken,
+    numOfTracksApiCall = 50,
+    numOfTracksBeforeEndOfPlaylist = 3, // this number cannot equal to numOfTracksForSplittingPlayedAndRemaining
+    numOfTracksForSplittingPlayedAndRemaining = 2, // to keep next song and randomize the rest
+    currentTrack = 0,
+    initializePlayer = false,
+    playerWidth = 545,
+    playerHeight = 305,
+    interval;
+
+var tracks = {
+  storeChannelId: function(channelUsername) {
+    if (typeof channelUsername === 'object') {
+      channelUsername = $('#searchChannel').val();
+      $('#searchChannel').val('');
+    }
+
+    if ($.inArray(channelUsername, channelNameList) === -1 ) {
+      channelNameList.push(channelUsername);
+      $.ajax({
+        type: 'GET',
+        url: 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + channelUsername + '&type=channel&key=' + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+        success: function(data) {
+          var channelId = data.items[0].id.channelId;
+          channelList.push(channelId);
+          tracks.retrievePlaylist(channelId);
+
+          var newSidebarItem = $("<li class='sidebarItem'></li>");
+          newSidebarItem.append('<i class="icon icon-heart"></i>' + channelUsername);
+          newSidebarItem.hide().appendTo($('#playlist')).slideDown();
+          return "hello";
+        },
+        error: function(data, textStatus, errorThrown) {
+          console.log("Error!");
+        }
+      });
+    } else {
+      app.announceError("You've already added this channel.");
+      $('#searchChannel').val('');
+    }
+  },
+  retrievePlaylist: function(channelId) {
+    $.ajax({
+      type: 'GET',
+      url: 'https://www.googleapis.com/youtube/v3/channels?part=snippet%2C+contentDetails&id=' + channelId + '&key=' + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+      success: function(data) {
+        var playlistId = data.items[0].contentDetails.relatedPlaylists.uploads;
+        playlistList.push(playlistId);
+        tracks.retrieveTracks(playlistId);
+      },
+      error: function(data, textStatus, errorThrown) {
+        console.log("Error!");
+      }
+    });
+  },
+  storeTracksInArray: function(data, tracklist) {
+    $.each(_.range(numOfTracksApiCall), function(n) {
+      var trackInfo = {
+        trackTitle: data.items[n].snippet.title,
+        trackId: data.items[n].contentDetails.videoId,
+        channelTitle: data.items[n].snippet.channelTitle,
+        thumbnail: data.items[n].snippet.thumbnails.default.url
+      };
+      tracklist.push(trackInfo);
+      numOfTracksInTrackList += 1;
+    });
+  },
+  randomizeRemainingTracks: function(newSetOfTracks) {
+    var playedTrackList = trackList.slice(0, currentTrack + numOfTracksForSplittingPlayedAndRemaining);
+    var remainingTrackList = trackList.slice(-(trackList.length - (currentTrack + numOfTracksForSplittingPlayedAndRemaining)));
+    var newRemainingTrackList = remainingTrackList.concat(newSetOfTracks);
+    newRemainingTrackList = _.shuffle(newRemainingTrackList);
+    trackList = playedTrackList.concat(newRemainingTrackList);
+  },
+  retrieveTracks: function(playlistId) {
+    $.ajax({
+      type: 'GET',
+      url: 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&maxResults=' + numOfTracksApiCall + '&playlistId=' + playlistId + '&fields=items(contentDetails%2Csnippet)%2CnextPageToken&key=' + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+      success: function(data) {
+        var newSetOfTracks = [];
+        tracks.storeTracksInArray(data, newSetOfTracks);
+        tracks.randomizeRemainingTracks(newSetOfTracks);
+        nextPageToken = data.nextPageToken;
+        if (initializePlayer === false) {
+          player.playTrack();
+          player.renderTrackInfo();
+          initializePlayer = true;
+        }
+      },
+      error: function(data, textStatus, errorThrown) {
+        console.log("Error!");
+      }
+    });
+  },
+  retrieveNextSetOfTracks: function() {
+    for (i = 0; i < playlistList.length; i++) {
+      (function(i) {
+        $.ajax({
+          type: "GET",
+          url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&maxResults=" + numOfTracksApiCall + "&pageToken=" + nextPageToken + "&playlistId=" + playlistList[i] + "&fields=items(contentDetails%2Csnippet)%2CnextPageToken&key=" + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+          success: function(data) {
+            var newSetOfTracks = [];
+            tracks.storeTracksInArray(data, newSetOfTracks);
+            tracks.randomizeRemainingTracks(newSetOfTracks);
+            nextPageToken = data.nextPageToken;
+            player.renderTrackInfo();
+          },
+          error: function(data, textStatus, errorThrown) {
+            console.log("Error!");
+          }
+        });
+      })(i);
+    }
+  }
+};
+
+var player = {
+  playTrack: function() {
+    var main = $('#main');
+    main.html('');
+    main.append('<div id="nowPlaying"><object type="application/x-shockwave-flash" id="ytplayer" data="http://www.youtube.com/v/' + trackList[currentTrack].trackId + '?enablejsapi=1&amp;playerapiid=ytplayer&amp;version=3&autoplay=1" height="' + playerHeight + '" width="' + playerWidth + '"><param name="allowScriptAccess" value="always"></object></div>');
+  },
+  renderNextTrack: function() {
+    var nowPlaying = $('#nowPlaying');
+    currentTrack += 1;
+    nowPlaying.html('');
+    nowPlaying.append('<object type="application/x-shockwave-flash" id="ytplayer" data="http://www.youtube.com/v/' + trackList[currentTrack].trackId + '?enablejsapi=1&amp;playerapiid=ytplayer&amp;version=3&autoplay=1" height="' + playerHeight + '" width="' + playerWidth + '"><param name="allowScriptAccess" value="always"></object>');
+    if (currentTrack === (numOfTracksInTrackList - numOfTracksBeforeEndOfPlaylist)) {
+      tracks.retrieveNextSetOfTracks();
+    } else {
+      player.renderTrackInfo();
+    }
+  },
+  renderTrackInfo: function() {
+    $('.trackinfo').remove();
+
+    var currentSource = $('#currenttrackinfo-template').html();
+    var currentTemplate = Handlebars.compile(currentSource);
+    var currentTrackInfoHTML = currentTemplate(trackList[currentTrack]);
+    $('#nowPlaying').append(currentTrackInfoHTML);
+
+    var nextSource = $('#nexttrackinfo-template').html();
+    var nextTemplate = Handlebars.compile(nextSource);
+    var nextTrackInfoHTML = nextTemplate(trackList[currentTrack + 1]);
+    $('#nowPlaying').append(nextTrackInfoHTML);
+  }
+};
+
+var app = {
+  addRecommendedChannel: function() {
+    var recommendedChannel = $(this).children().data("channel");
+    tracks.storeChannelId(recommendedChannel);
+  },
+  announceError: function(text) {
+    function disappearError() {
+      clearInterval(interval);
+      interval = setInterval(function() {
+        $('.errorMessage').fadeOut('fast');
+      }, 2000);
+    }
+    var errorMessage = $("<div class='errorMessage'></div>");
+    errorMessage.append(text);
+    errorMessage.hide().appendTo($('#sidebar')).fadeIn('fast');
+    disappearError();
+  }
+};
+
+var onYouTubePlayerReady = function (playerId) {
+  var player = document.getElementById("ytplayer");
+  player.addEventListener("onStateChange", "onytplayerStateChange");
+};
+
+var onytplayerStateChange = function (newState) {
+  if (newState === 0) {
+    player.renderNextTrack();
+  }
+};
+
+
+$(function() {
+  $('#btnSearchChannel').on('click', tracks.storeChannelId);
+  $('#main').on('click', '#recommendedChannel li', app.addRecommendedChannel);
+  $('#main').on('click', '#loadNextTrack .trackinfo', player.renderNextTrack);
+
+  $("#searchChannel").keypress(function(event){
+    var channelUsername = $('#searchChannel').val();
+    if(event.keyCode == 13 && channelUsername != ''){
+      event.preventDefault();
+      tracks.storeChannelId(channelUsername);
+      $('#searchChannel').val('');
+    }
+  });
+});
