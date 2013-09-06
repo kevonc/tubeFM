@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>TubeFM</title>
-  <%= stylesheet_link_tag    "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+<%= render 'layouts/header' %>
+<%= render 'layouts/nav' %>
 
-<%= yield %>
+<div id="sidebar">
+  <%= render 'layouts/sidebar' %>
+</div>
+<div id="main">
+  <%= yield %>
+</div>
 
-</body>
-</html>
+<%= render 'modals/login' %>
+<%= render 'modals/signup' %>
+<%= render 'modals/profile' %>
+
+<%= render 'layouts/footer' %>
