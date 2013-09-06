@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rails_12factor'
 gem 'dotenv'
 gem 'youtube_it'
 gem 'google-api-client'
