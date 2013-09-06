@@ -24,7 +24,7 @@ var tracks = {
       channelNameList.push(channelUsername);
       $.ajax({
         type: 'GET',
-        url: 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + channelUsername + '&type=channel&key=' + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+        url: 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + channelUsername + '&type=channel&key=' + '<%= ENV['YOUTUBE_BROWSER_KEY'] %>',
         success: function(data) {
           var channelId = data.items[0].id.channelId;
           channelList.push(channelId);
@@ -47,7 +47,7 @@ var tracks = {
   retrievePlaylist: function(channelId) {
     $.ajax({
       type: 'GET',
-      url: 'https://www.googleapis.com/youtube/v3/channels?part=snippet%2C+contentDetails&id=' + channelId + '&key=' + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+      url: 'https://www.googleapis.com/youtube/v3/channels?part=snippet%2C+contentDetails&id=' + channelId + '&key=' + '<%= ENV['YOUTUBE_BROWSER_KEY'] %>',
       success: function(data) {
         var playlistId = data.items[0].contentDetails.relatedPlaylists.uploads;
         playlistList.push(playlistId);
@@ -80,7 +80,7 @@ var tracks = {
   retrieveTracks: function(playlistId) {
     $.ajax({
       type: 'GET',
-      url: 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&maxResults=' + numOfTracksApiCall + '&playlistId=' + playlistId + '&fields=items(contentDetails%2Csnippet)%2CnextPageToken&key=' + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+      url: 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&maxResults=' + numOfTracksApiCall + '&playlistId=' + playlistId + '&fields=items(contentDetails%2Csnippet)%2CnextPageToken&key=' + '<%= ENV['YOUTUBE_BROWSER_KEY'] %>',
       success: function(data) {
         var newSetOfTracks = [];
         tracks.storeTracksInArray(data, newSetOfTracks);
@@ -102,7 +102,7 @@ var tracks = {
       (function(i) {
         $.ajax({
           type: "GET",
-          url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&maxResults=" + numOfTracksApiCall + "&pageToken=" + nextPageToken + "&playlistId=" + playlistList[i] + "&fields=items(contentDetails%2Csnippet)%2CnextPageToken&key=" + "<%= ENV['YOUTUBE_BROWSER_KEY'] %>",
+          url: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&maxResults=" + numOfTracksApiCall + "&pageToken=" + nextPageToken + "&playlistId=" + playlistList[i] + "&fields=items(contentDetails%2Csnippet)%2CnextPageToken&key=" + '<%= ENV['YOUTUBE_BROWSER_KEY'] %>',
           success: function(data) {
             var newSetOfTracks = [];
             tracks.storeTracksInArray(data, newSetOfTracks);
