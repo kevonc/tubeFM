@@ -17,10 +17,8 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: tubeFM_development
+  database: tubefm_development
   pool: 5
-  username: tubeFM
-  password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -46,15 +44,11 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: tubeFM_test
+  database: tubefm_test
   pool: 5
-  username: tubeFM
-  password:
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: tubeFM_production
+  database: tubefm_production
   pool: 5
-  username: tubeFM
-  password:
