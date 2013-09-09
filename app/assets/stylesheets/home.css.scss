@@ -8,10 +8,8 @@ div.home {
   width: 100%;
   position: relative;
   min-height: 100%;
-  // margin: 0;
   text-align: center;
-  // display: block;
-  background: #3D575A url('https://s3.amazonaws.com/tubeFM/nyc.jpg?AWSAccessKeyId=ASIAJLBXATSFFOP3OTPA&Expires=1378742620&Signature=9iMkzAGtuMH28HF3qQjYGYhEaXQ%3D&x-amz-security-token=AQoDYXdzEJH//////////wEawALru8XSbCewdHtM4bC1%2BymuANe8SgujdcBF9XpEBwm7JWJ/nL2tOLBuAm0coPWt8JZIEzw/q4uf6Fe8Q7gIdMjPFE6BBamkT/WkSSEJ/Aw0%2BDsN6eiAVFSoIUbCJEc3hi562CFMnlUOxKCzb%2BH6pN5W9H5TNHc63EqLCW3Vek2qcpSC2SlWpkB7XsMkU926r7H4BUqk%2BtDCv7tT0ahdXPkSke67H/3gr/QajzIN6ZpKVmgxAVNWNn2zTcHw%2Bsq/fN7Zcqz3XxiQRdM1tAdUaryfSLLu%2BJWzeXyP2LEmLAL75w95iT8waTbbBKEbZST8yjCLRegiAVSYBWao7OjMfRVt/hrkCJOaHvASjMSLcCVmzH1fT1HWO/sM/ch/vAr5beT1o11MChbTIa4puIHmtH97MMfEh7xxJJuWfSez6wvI0iDu3beRBQ%3D%3D') no-repeat;
+  background: #3D575A url('http://i.imgur.com/plsLPZc.jpg') no-repeat;
   background-size: auto, cover;
   background-position: right top;
   background-repeat:repeat,no-repeat;
@@ -58,22 +56,14 @@ div.discover {
   ul {
     list-style: none;
     margin-left: -40px;
-    // margin-bottom: 0;
   }
   li.channelItem {
     width: 25%;
     background-color: #fff;
-    // min-width: 180px;
-    // height: auto;
     float: left;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
-    // border-top: 1px solid #000;
-    // border-left: 1px solid #000;
-    // &:nth-child(4n+1) {
-    //   border-left: 0;
-    // }
     img {
       width: 100%;
       height: 100%;;
