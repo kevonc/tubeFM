@@ -6,7 +6,9 @@ gem 'google-api-client'
 gem 'trollop'
 gem 'puma'
 gem 'simple_form'
-gem "font-awesome-rails"
+gem 'font-awesome-rails'
+gem 'backbone-on-rails'
+gem 'handlebars_assets'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
