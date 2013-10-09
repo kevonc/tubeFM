@@ -10,7 +10,7 @@
 }
 
 .intro {
-  padding: 60px 0;
+  padding: 40px 0;
   color: #fff;
   h1 {
     font-family: 'Roboto', sans-serif;
@@ -23,6 +23,11 @@
     text-transform: uppercase;
     margin: 10px 0;
     padding: 0;
+  }
+  h5 {
+    margin-top: 40px;
+    font-size: 1.2em;
+    font-weight: 300;
   }
 }
 
