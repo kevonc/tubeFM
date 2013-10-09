@@ -1,0 +1,30 @@
+<ul class="nav nav-tabs" id="miscTab">
+  <li class="active"><a href="#rec">recommended</a></li>
+  <li><a href="#your-playlist">your playlist</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="rec">
+    <div class="discover">
+      <h2>recommended channels</h2>
+      <ul id="recommended-channel">
+        <li><%= link_to image_tag('majesticcasual2.jpg'), "#", data: { channel: 'majesticcasual'}, title: 'Majestic Casual' %></li>
+        <li><%= link_to image_tag('mrsuicidesheep.jpg'), "#", data: { channel: 'MrSuicideSheep'}, title: 'Mr Suicide Sheep' %></li>
+        <li><%= link_to image_tag('etonmessy.jpg'), "#", data: { channel: 'Etonmessy'}, title: 'Etonmessy' %></li>
+        <li><%= link_to image_tag('thesoundyouneed1.jpg'), "#", data: { channel: 'thesoundyouneed1'}, title: 'The Sound You Need' %></li>
+        <li><%= link_to image_tag('themusicbouncer.jpg'), "#", data: { channel: 'TheMusicBouncer'}, title: 'The Music Bouncer' %></li>
+        <li><%= link_to image_tag('thvbgd.jpg'), "#", data: { channel: 'thvbgd'}, title: 'The Vibe Guide' %></li>
+        <li><%= link_to image_tag('suicidesheeep.jpg'), "#", data: { channel: 'SuicideSheeep'}, title: 'Suicide Sheeep' %></li>
+        <li><%= link_to image_tag('electropose12.jpg'), "#", data: { channel: 'electropose1'}, title: 'Electric Pose' %></li>
+        <li><%= link_to image_tag('mrmommusic.jpg'), "#", data: { channel: 'MrMoMMusic'}, title: 'Mr MoM Music' %></li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-pane" id="your-playlist">
+    <div class="playlist">
+      <h2>your current playlist</h2>
+      <ul id="current-playlist">
+      </ul>
+    </div>
+  </div>
+</div>

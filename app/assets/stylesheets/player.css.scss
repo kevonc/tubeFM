@@ -1,35 +1,51 @@
-// Place all the styles related to the Songs controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-#playlist {
-  list-style: none;
-  margin-left: -40px;
-}
-
-#nowPlaying {
-  display: block;
+#player {
+  min-height: 346px;
+  margin: 50px auto 0 auto;
+  width: 100%;
+  text-align: center;
   background: #000 url('http://i.imgur.com/Mxu68rv.jpg') no-repeat;
   background-size: auto, cover;
   background-position: right top;
   background-repeat:repeat,no-repeat;
-  box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  -webkit-box-sizing:border-box;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  padding: 30px 0;
+}
+
+.intro {
+  padding: 60px 0;
+  color: #fff;
+  h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 4.6em;
+    margin: 20px 0;
+  }
+  h3 {
+    font-family: 'Dosis', sans-serif;
+    text-transform: uppercase;
+    margin: 10px 0;
+    padding: 0;
+  }
+}
+
+#playerObject, #playerControl {
+  display: inline-block;
+}
+
+#playerObject {
+  margin-top: 20px;
+}
+
+#playerControl {
+  margin-left: 20px;
+  margin-bottom: 20px;
 }
 
 .trackinfo {
-  width: 545px;
+  width: 345px;
   background-color: #000;
   color: #fff;
   overflow: auto;
-  margin: 0 auto;
   padding: 10px;
-    box-sizing:border-box;
+  box-sizing:border-box;
   -moz-box-sizing:border-box;
   -webkit-box-sizing:border-box;
   clear: both;
@@ -63,9 +79,8 @@
   }
 }
 
-.now-playing, .coming-up {
-  width: 545px;
-  margin: 0 auto;
+#now-playing, #next-track {
+  width: 345px;
   text-align: left;
   h1 {
     font-family: 'Roboto', sans-serif;
@@ -78,7 +93,7 @@
   }
 }
 
-#loadNextTrack .trackinfo {
+#next-track .trackinfo {
   &:hover {
     background-color: #1C1C1C;
     cursor: pointer;

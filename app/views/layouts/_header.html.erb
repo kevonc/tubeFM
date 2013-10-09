@@ -7,21 +7,8 @@
   <%= csrf_meta_tags %>
 
   <script id="currenttrackinfo-template" type="text/x-handlebars-template">
-    <div class="now-playing"><h1>Now Playing</h1></div>
-    <div class="trackinfo">
-      <div class="trackThumbnail">
-        <img src="{{thumbnail}}">
-      </div>
-      <div class="trackDetail">
-        <p class="trackTitle">{{trackTitle}}</p>
-        <p class="channelTitle">{{channelTitle}}</p>
-      </div>
-    </div>
-  </script>
-
-  <script id="nexttrackinfo-template" type="text/x-handlebars-template">
-    <div id="loadNextTrack">
-      <div class="coming-up"><h1>Advance to Next Track</h1></div>
+    <div id="now-playing">
+      <h1>Now Playing</h1>
       <div class="trackinfo">
         <div class="trackThumbnail">
           <img src="{{thumbnail}}">
@@ -29,7 +16,21 @@
         <div class="trackDetail">
           <p class="trackTitle">{{trackTitle}}</p>
           <p class="channelTitle">{{channelTitle}}</p>
+        </div>
+      </div>
+    </div>
+  </script>
 
+  <script id="nexttrackinfo-template" type="text/x-handlebars-template">
+    <div id="next-track">
+      <h1>Advance to Next Track</h1>
+      <div class="trackinfo">
+        <div class="trackThumbnail">
+          <img src="{{thumbnail}}">
+        </div>
+        <div class="trackDetail">
+          <p class="trackTitle">{{trackTitle}}</p>
+          <p class="channelTitle">{{channelTitle}}</p>
         </div>
       </div>
     </div>

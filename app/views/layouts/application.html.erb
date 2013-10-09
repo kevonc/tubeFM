@@ -1,12 +1,16 @@
 <%= render 'layouts/header' %>
 <%= render 'layouts/nav' %>
 
-<div id="sidebar">
-  <%= render 'layouts/sidebar' %>
+<div id="master">
+  <div id="player">
+    <%= yield %>
+  </div>
+  <div id="search">
+    <%= render 'layouts/search' %>
+  </div>
+  <div id="misc">
+    <%= render 'layouts/misc' %>
+  </div>
 </div>
-<div id="main">
-  <%= yield %>
-</div>
-
 
 <%= render 'layouts/footer' %>

@@ -1,8 +1,6 @@
 $(function() {
-  $('#searchChannel').focusin(function() {
-    $(this).css('background-color', 'black');
-  });
-  $('#searchChannel').focusout(function() {
-    $(this).css('background-color', '#313031');
+  $('#miscTab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
   });
 });

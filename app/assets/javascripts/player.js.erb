@@ -30,17 +30,17 @@ var tracks = {
           channelList.push(channelId);
           tracks.retrievePlaylist(channelId);
 
-          var newSidebarItem = $("<li class='sidebarItem'></li>");
-          newSidebarItem.append('<i class="icon icon-heart"></i>' + channelUsername);
-          newSidebarItem.hide().appendTo($('#playlist')).slideDown();
-          return "hello";
+          app.announceMsg("You've added <span class='channelName'>" + channelUsername + "</span> to your current playlist.");
+
+          var channelThumbnailUrl = data.items[0].snippet.thumbnails.medium.url;
+          app.appendChannelToPlaylist(channelUsername, channelThumbnailUrl);
         },
         error: function(data, textStatus, errorThrown) {
           console.log("Error!");
         }
       });
     } else {
-      app.announceError("You've already added this channel.");
+      app.announceMsg("You already have this channel in your playlist.");
       $('#searchChannel').val('');
     }
   },
@@ -121,12 +121,12 @@ var tracks = {
 
 var player = {
   playTrack: function() {
-    var main = $('#main');
+    var main = $('#player');
     main.html('');
-    main.append('<div id="nowPlaying"><object type="application/x-shockwave-flash" id="ytplayer" data="http://www.youtube.com/v/' + trackList[currentTrack].trackId + '?enablejsapi=1&amp;playerapiid=ytplayer&amp;version=3&autoplay=1" height="' + playerHeight + '" width="' + playerWidth + '"><param name="allowScriptAccess" value="always"></object></div>');
+    main.append('<div id="playerObject"><object type="application/x-shockwave-flash" id="ytplayer" data="http://www.youtube.com/v/' + trackList[currentTrack].trackId + '?enablejsapi=1&amp;playerapiid=ytplayer&amp;version=3&autoplay=1" height="' + playerHeight + '" width="' + playerWidth + '"><param name="allowScriptAccess" value="always"></object></div><div id="playerControl"></div>');
   },
   renderNextTrack: function() {
-    var nowPlaying = $('#nowPlaying');
+    var nowPlaying = $('#playerObject');
     currentTrack += 1;
     nowPlaying.html('');
     nowPlaying.append('<object type="application/x-shockwave-flash" id="ytplayer" data="http://www.youtube.com/v/' + trackList[currentTrack].trackId + '?enablejsapi=1&amp;playerapiid=ytplayer&amp;version=3&autoplay=1" height="' + playerHeight + '" width="' + playerWidth + '"><param name="allowScriptAccess" value="always"></object>');
@@ -137,17 +137,18 @@ var player = {
     }
   },
   renderTrackInfo: function() {
-    $('.trackinfo').remove();
+    $('#now-playing').remove();
+    $('#next-track').remove();
 
     var currentSource = $('#currenttrackinfo-template').html();
     var currentTemplate = Handlebars.compile(currentSource);
     var currentTrackInfoHTML = currentTemplate(trackList[currentTrack]);
-    $('#nowPlaying').append(currentTrackInfoHTML);
+    $('#playerControl').append(currentTrackInfoHTML);
 
     var nextSource = $('#nexttrackinfo-template').html();
     var nextTemplate = Handlebars.compile(nextSource);
     var nextTrackInfoHTML = nextTemplate(trackList[currentTrack + 1]);
-    $('#nowPlaying').append(nextTrackInfoHTML);
+    $('#playerControl').append(nextTrackInfoHTML);
   }
 };
 
@@ -156,17 +157,26 @@ var app = {
     var recommendedChannel = $(this).children().data("channel");
     tracks.storeChannelId(recommendedChannel);
   },
-  announceError: function(text) {
-    function disappearError() {
+  announceMsg: function(text) {
+    function disappearMsg() {
       clearInterval(interval);
       interval = setInterval(function() {
-        $('.errorMessage').fadeOut('fast');
+        $('.flashMessage').fadeOut('fast');
       }, 2000);
     }
-    var errorMessage = $("<div class='errorMessage'></div>");
+    var errorMessage = $("<div class='flashMessage'></div>");
     errorMessage.append(text);
-    errorMessage.hide().appendTo($('#sidebar')).fadeIn('fast');
-    disappearError();
+    errorMessage.hide().appendTo($('#search')).fadeIn('fast');
+    disappearMsg();
+  },
+  appendChannelToPlaylist: function(channelUsername, channelThumbnailUrl) {
+    var newPlaylistItem = $("<li></li>");
+    newPlaylistItem.append('<h4>' + channelUsername + '</h4>');
+    var newPlaylistThumnail = document.createElement('img');
+    newPlaylistThumnail.src = channelThumbnailUrl;
+    newPlaylistThumnail.alt = channelUsername;
+    newPlaylistItem.append(newPlaylistThumnail);
+    newPlaylistItem.hide().appendTo($('#current-playlist')).slideDown();
   }
 };
 
@@ -184,8 +194,8 @@ var onytplayerStateChange = function (newState) {
 
 $(function() {
   $('#btnSearchChannel').on('click', tracks.storeChannelId);
-  $('#main').on('click', '#recommendedChannel li', app.addRecommendedChannel);
-  $('#main').on('click', '#loadNextTrack .trackinfo', player.renderNextTrack);
+  $('#misc').on('click', '#recommended-channel li', app.addRecommendedChannel);
+  $('#player').on('click', '#next-track .trackinfo', player.renderNextTrack);
 
   $("#searchChannel").keypress(function(event){
     var channelUsername = $('#searchChannel').val();
