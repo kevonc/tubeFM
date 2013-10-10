@@ -10,7 +10,7 @@ var channelNameList = [],
     initializePlayer = false,
     playerWidth = 545,
     playerHeight = 305,
-    interval;
+    flashMsgInterval;
 
 var tracks = {
   storeChannelId: function(channelUsername) {
@@ -168,8 +168,8 @@ var app = {
   },
   announceMsg: function(text) {
     function disappearMsg() {
-      clearInterval(interval);
-      interval = setInterval(function() {
+      clearInterval(flashMsgInterval);
+      flashMsgInterval = setInterval(function() {
         $('.flashMessage').fadeOut('fast');
       }, 2000);
     }
