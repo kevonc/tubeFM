@@ -1,5 +1,4 @@
 var channelNameList = [],
-    channelList = [],
     playlistList = [],
     trackList = [],
     numOfTracksInTrackList = 0,
@@ -28,7 +27,6 @@ var tracks = {
         success: function(data) {
           if (data.items[0] !== undefined) {
             var channelId = data.items[0].id.channelId;
-            channelList.push(channelId);
             tracks.retrievePlaylist(channelId);
 
             app.announceMsg("You've added <span class='channelName'>" + channelUsername + "</span> to your current playlist.");
@@ -64,7 +62,7 @@ var tracks = {
   },
   storeTracksInArray: function(data, tracklist) {
     var numOfTracks = data.items.length;
-    if (numOfTracks < 50) {
+    if (numOfTracks < numOfTracksApiCall) {
       numOfTracksApiCall = numOfTracks
     } else if (numOfTracks = undefined) {
       app.announceMsg("This channel has no videos.");
