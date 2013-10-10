@@ -26,14 +26,18 @@ var tracks = {
         type: 'GET',
         url: 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + channelUsername + '&type=channel&key=' + 'AIzaSyDgBp5KPiA5xyQqnGWs-mM7p5YLRm_hmKM',
         success: function(data) {
-          var channelId = data.items[0].id.channelId;
-          channelList.push(channelId);
-          tracks.retrievePlaylist(channelId);
+          if (data.items[0] !== undefined) {
+            var channelId = data.items[0].id.channelId;
+            channelList.push(channelId);
+            tracks.retrievePlaylist(channelId);
 
-          app.announceMsg("You've added <span class='channelName'>" + channelUsername + "</span> to your current playlist.");
+            app.announceMsg("You've added <span class='channelName'>" + channelUsername + "</span> to your current playlist.");
 
-          var channelThumbnailUrl = data.items[0].snippet.thumbnails.medium.url;
-          app.appendChannelToPlaylist(channelUsername, channelThumbnailUrl);
+            var channelThumbnailUrl = data.items[0].snippet.thumbnails.medium.url;
+            app.appendChannelToPlaylist(channelUsername, channelThumbnailUrl);
+          } else {
+            app.announceMsg("The channel you entered is not valid.");
+          }
         },
         error: function(data, textStatus, errorThrown) {
           console.log("Error!");
@@ -59,15 +63,22 @@ var tracks = {
     });
   },
   storeTracksInArray: function(data, tracklist) {
+    var numOfTracks = data.items.length;
+    if (numOfTracks < 50) {
+      numOfTracksApiCall = numOfTracks
+    } else if (numOfTracks = undefined) {
+      app.announceMsg("This channel has no videos.");
+    }
+
     $.each(_.range(numOfTracksApiCall), function(n) {
-      var trackInfo = {
-        trackTitle: data.items[n].snippet.title,
-        trackId: data.items[n].contentDetails.videoId,
-        channelTitle: data.items[n].snippet.channelTitle,
-        thumbnail: data.items[n].snippet.thumbnails.default.url
-      };
-      tracklist.push(trackInfo);
-      numOfTracksInTrackList += 1;
+        var trackInfo = {
+          trackTitle: data.items[n].snippet.title,
+          trackId: data.items[n].contentDetails.videoId,
+          channelTitle: data.items[n].snippet.channelTitle,
+          thumbnail: data.items[n].snippet.thumbnails.default.url
+        };
+        tracklist.push(trackInfo);
+        numOfTracksInTrackList += 1;
     });
   },
   randomizeRemainingTracks: function(newSetOfTracks) {
