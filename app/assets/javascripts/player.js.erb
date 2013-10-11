@@ -69,14 +69,16 @@ var tracks = {
     }
 
     $.each(_.range(numOfTracksApiCall), function(n) {
-        var trackInfo = {
-          trackTitle: data.items[n].snippet.title,
-          trackId: data.items[n].contentDetails.videoId,
-          channelTitle: data.items[n].snippet.channelTitle,
-          thumbnail: data.items[n].snippet.thumbnails.default.url
-        };
-        tracklist.push(trackInfo);
-        numOfTracksInTrackList += 1;
+        if (data.items[n].snippet.title !== 'Private video') {
+          var trackInfo = {
+            trackTitle: data.items[n].snippet.title,
+            trackId: data.items[n].contentDetails.videoId,
+            channelTitle: data.items[n].snippet.channelTitle,
+            thumbnail: data.items[n].snippet.thumbnails.default.url
+          };
+          tracklist.push(trackInfo);
+          numOfTracksInTrackList += 1;
+        }
     });
   },
   randomizeRemainingTracks: function(newSetOfTracks) {
